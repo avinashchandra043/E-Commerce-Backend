@@ -14,7 +14,7 @@ const createProduct = async (reqData) => {
   }
 
   let secondLevel = await Category.findOne({
-    name: reqData.secondLevel,
+    name: reqData.secondLevelCategory,
     parentCategory: topLevel._id,
   });
 
@@ -29,7 +29,7 @@ const createProduct = async (reqData) => {
   }
 
   let thirdLevel = await Category.findOne({
-    name: reqData.thirdLevel,
+    name: reqData.thirdLevelCategory,
     parentCategory: secondLevel._id,
   });
 
@@ -97,7 +97,11 @@ const getAllProducts = async (reqQuery) => {
     pageSize,
   } = reqQuery;
 
-  pageSize = pageSize || 10;
+  pageSize = Number(pageSize) || 10;
+  minPrice = Number(minPrice);
+  maxPrice = Number(maxPrice);
+  minDiscount = Number(minDiscount);
+  pageNumber = Number(pageNumber) >= 1 ? Number(pageNumber) : 1;
 
   let query = Product.find().populate("category");
 
@@ -139,10 +143,9 @@ const getAllProducts = async (reqQuery) => {
   }
 
   if (sort) {
-    const sortDirection = sort === "price_hight" ? -1 : 1;
+    const sortDirection = sort === "price_high" ? -1 : 1;
     query = query.sort({ discountedPrice: sortDirection });
   }
-
   const totalProducts = await Product.countDocuments(query);
   const skip = (pageNumber - 1) * pageSize;
   query = query.skip(skip).limit(pageSize);
