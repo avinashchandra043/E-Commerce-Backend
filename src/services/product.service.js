@@ -2,11 +2,11 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
 const createProduct = async (reqData) => {
-  let topLevel = await Category.findOne({ name: reqData.topLevelCategory });
+  let topLevel = await Category.findOne({ name: reqData.topLavelCategory });
 
   if (!topLevel) {
     topLevel = new Category({
-      name: reqData.topLevelCategory,
+      name: reqData.topLavelCategory,
       level: 1,
     });
 
@@ -14,13 +14,13 @@ const createProduct = async (reqData) => {
   }
 
   let secondLevel = await Category.findOne({
-    name: reqData.secondLevelCategory,
+    name: reqData.secondLavelCategory,
     parentCategory: topLevel._id,
   });
 
   if (!secondLevel) {
     secondLevel = new Category({
-      name: reqData.secondLevelCategory,
+      name: reqData.secondLavelCategory,
       parentCategory: topLevel._id,
       level: 2,
     });
@@ -29,13 +29,13 @@ const createProduct = async (reqData) => {
   }
 
   let thirdLevel = await Category.findOne({
-    name: reqData.thirdLevelCategory,
+    name: reqData.thirdLavelCategory,
     parentCategory: secondLevel._id,
   });
 
   if (!thirdLevel) {
     thirdLevel = new Category({
-      name: reqData.thirdLevelCategory,
+      name: reqData.thirdLavelCategory,
       parentCategory: secondLevel._id,
       level: 3,
     });
@@ -48,7 +48,7 @@ const createProduct = async (reqData) => {
     color: reqData.color,
     description: reqData.description,
     discountedPrice: reqData.discountedPrice,
-    discountedPercent: reqData.discountedPercent,
+    discountPercent: reqData.discountPercent,
     imageUrl: reqData.imageUrl,
     brand: reqData.brand,
     price: reqData.price,

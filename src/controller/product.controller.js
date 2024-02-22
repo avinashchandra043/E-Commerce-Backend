@@ -49,7 +49,7 @@ const getAllProducts = async (req, res) => {
 };
 
 const createMultipleProduct = async (req, res) => {
-  const productId = req.params.id;
+  console.log(">>>>>>>", req.body);
   try {
     const product = await productService.createMultipleProduct(req.body);
     return res.status(201).send({ message: "Products created Successfully" });
