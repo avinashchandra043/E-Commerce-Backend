@@ -2,11 +2,13 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
 const createProduct = async (reqData) => {
-  let topLevel = await Category.findOne({ name: reqData.topLavelCategory });
+  let topLevel = await Category.findOne({
+    name: reqData.topLavelCategory.toLowerCase(),
+  });
 
   if (!topLevel) {
     topLevel = new Category({
-      name: reqData.topLavelCategory,
+      name: reqData.topLavelCategory.toLowerCase(),
       level: 1,
     });
 
@@ -14,13 +16,13 @@ const createProduct = async (reqData) => {
   }
 
   let secondLevel = await Category.findOne({
-    name: reqData.secondLavelCategory,
+    name: reqData.secondLavelCategory.toLowerCase(),
     parentCategory: topLevel._id,
   });
 
   if (!secondLevel) {
     secondLevel = new Category({
-      name: reqData.secondLavelCategory,
+      name: reqData.secondLavelCategory.toLowerCase(),
       parentCategory: topLevel._id,
       level: 2,
     });
@@ -29,13 +31,13 @@ const createProduct = async (reqData) => {
   }
 
   let thirdLevel = await Category.findOne({
-    name: reqData.thirdLavelCategory,
+    name: reqData.thirdLavelCategory.toLowerCase(),
     parentCategory: secondLevel._id,
   });
 
   if (!thirdLevel) {
     thirdLevel = new Category({
-      name: reqData.thirdLavelCategory,
+      name: reqData.thirdLavelCategory.toLowerCase(),
       parentCategory: secondLevel._id,
       level: 3,
     });
@@ -48,11 +50,13 @@ const createProduct = async (reqData) => {
     color: reqData.color,
     description: reqData.description,
     discountedPrice: reqData.discountedPrice,
-    discountPercent: reqData.discountPercent,
+    discountPercent: Math.floor(
+      ((reqData.price - reqData.discountedPrice) / reqData.price) * 100
+    ),
     imageUrl: reqData.imageUrl,
     brand: reqData.brand,
     price: reqData.price,
-    sizes: reqData.sizes,
+    sizes: reqData.size,
     quantity: reqData.quantity,
     category: thirdLevel._id,
   });
@@ -127,18 +131,19 @@ const getAllProducts = async (reqQuery) => {
   }
 
   if (minPrice && maxPrice) {
-    query = await query.where("discountedPrice").gte(minPrice).lte(maxPrice);
+    console.log("reqQuery", reqQuery, minPrice, maxPrice);
+    query = query.where("discountedPrice").gte(minPrice).lte(maxPrice);
   }
 
   if (minDiscount) {
-    query = await query.where("discountPercent").gt(minDiscount);
+    query = query.where("discountPercent").gt(minDiscount);
   }
 
   if (stock) {
     if (stock === "in_stock") {
-      query = await query.where("quantity").gt(0);
+      query = query.where("quantity").gt(0);
     } else if (stock === "out_of_stock") {
-      query = await query.where("quantity").gt(1);
+      query = query.where("quantity").gt(1);
     }
   }
 
