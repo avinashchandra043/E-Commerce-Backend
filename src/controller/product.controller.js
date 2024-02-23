@@ -42,14 +42,14 @@ const findProductById = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await productService.getAllProducts(req.query);
-    return res.status(201).send(products);
+    return res.status(200).send(products);
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
 };
 
 const createMultipleProduct = async (req, res) => {
-  const productId = req.params.id;
+  console.log(">>>>>>>", req.body);
   try {
     const product = await productService.createMultipleProduct(req.body);
     return res.status(201).send({ message: "Products created Successfully" });
