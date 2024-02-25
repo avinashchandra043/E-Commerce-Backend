@@ -22,6 +22,7 @@ const orderSchema = new mongoose.Schema({
   shippingAddress: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "addresses",
+    required: true,
   },
   paymentDetails: {
     paymentMethod: {
