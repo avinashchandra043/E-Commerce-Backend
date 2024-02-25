@@ -1,5 +1,7 @@
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
+const User = require("../models/user.model");
+const Rating = require("../models/rating.model");
 
 const createProduct = async (reqData) => {
   let topLevel = await Category.findOne({
@@ -79,7 +81,23 @@ const updateProduct = async (productId, reqData) => {
 };
 
 const findProductById = async (id) => {
-  const product = await Product.findById(id).populate("category").exec();
+  const product = await Product.findById(id)
+    .populate("category")
+    .populate("ratings")
+    .populate({
+      path: "reviews",
+      populate: [
+        {
+          path: "user",
+          model: User,
+        },
+        {
+          path: "rating",
+          model: Rating,
+        },
+      ],
+    })
+    .exec();
 
   if (!product) {
     throw new Error("Product not found with id : ", id);
@@ -131,7 +149,6 @@ const getAllProducts = async (reqQuery) => {
   }
 
   if (minPrice && maxPrice) {
-    console.log("reqQuery", reqQuery, minPrice, maxPrice);
     query = query.where("discountedPrice").gte(minPrice).lte(maxPrice);
   }
 

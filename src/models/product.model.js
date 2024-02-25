@@ -58,9 +58,31 @@ const productSchema = new mongoose.Schema({
       ref: "reviews",
     },
   ],
-  numRatings: {
-    type: Number,
-    default: 0,
+  ratingData: {
+    excellent: {
+      type: Number,
+      default: 0,
+    },
+    good: {
+      type: Number,
+      default: 0,
+    },
+    average: {
+      type: Number,
+      default: 0,
+    },
+    poor: {
+      type: Number,
+      default: 0,
+    },
+    avgRating: {
+      type: Number,
+      default: 0,
+    },
+    totalRating: {
+      type: Number,
+      default: 0,
+    },
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,

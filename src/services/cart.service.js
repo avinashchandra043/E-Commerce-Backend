@@ -27,7 +27,8 @@ const findUserCart = async (userId) => {
     }
     cart.totalPrice = totalPrice;
     cart.totalItem = totalItem;
-    cart.discount = totalPrice - totalDiscountedPrice;
+    cart.discount = totalDiscountedPrice;
+    cart.totalDiscountedPrice = totalPrice - totalDiscountedPrice;
 
     return cart;
   } catch (error) {
@@ -58,8 +59,9 @@ const addCartItem = async (userId, req) => {
       const createdCartItem = await cartItem.save();
       cart.cartItems.push(createdCartItem);
       await cart.save();
-      return "Item added to cart";
+      return createdCartItem;
     }
+    return isPresent;
   } catch (error) {
     throw new Error(error.message);
   }
