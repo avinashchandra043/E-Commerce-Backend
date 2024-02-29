@@ -168,6 +168,11 @@ const getAllProducts = async (reqQuery) => {
     const sortDirection = sort === "price_high" ? -1 : 1;
     query = query.sort({ discountedPrice: sortDirection });
   }
+
+  query = query.select(
+    "_id title price discountedPrice discountPercent brand imageUrl ratingData"
+  );
+
   const totalProducts = await Product.countDocuments(query);
   const skip = (pageNumber - 1) * pageSize;
   query = query.skip(skip).limit(pageSize);
