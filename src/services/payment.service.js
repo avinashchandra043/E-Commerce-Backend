@@ -5,7 +5,7 @@ const orderService = require("../services/order.service");
 const createPaymentLink = async (orderId) => {
   const order = await orderService.findOrderById(orderId);
   const paymentLinkRequest = {
-    amount: order.totalPrice * 100,
+    amount: order.totalDiscountedPrice * 100,
     currency: "INR",
     customer: {
       name: order.user.firstName + "" + order.user.lastName,
@@ -34,11 +34,10 @@ const updatePaymentInformation = async (reqData) => {
   try {
     const order = await orderService.findOrderById(orderId);
     const payment = await razorpay.payments.fetch(paymentId);
-    if (payment.status == "captrued") {
+    if (payment.status == "captured") {
       order.paymentDetails.paymentId = paymentId;
       order.paymentDetails.status = "COMPLETED";
       order.orderStatus = "PLACED";
-
       await order.save();
     }
 
