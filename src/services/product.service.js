@@ -4,6 +4,10 @@ const User = require("../models/user.model");
 const Rating = require("../models/rating.model");
 
 const createProduct = async (reqData) => {
+  if (!reqData.topLavelCategory) {
+    return;
+  }
+
   let topLevel = await Category.findOne({
     name: reqData.topLavelCategory.toLowerCase(),
   });
@@ -185,6 +189,7 @@ const getAllProducts = async (reqQuery) => {
 };
 
 const createMultipleProduct = async (products) => {
+  console.log(">>>>ocmingHere", products);
   for (let product of products) {
     await createProduct(product);
   }
