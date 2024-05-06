@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const currentEnvironment = "DEV";
 const DEV = "DEV";
@@ -6,13 +7,11 @@ const PROD = "PROD";
 
 const environmentConfig = {
   PROD: {
-    mongodbUrl:
-      "mongodb+srv://avinashchandrabarik01:pZ5KocckSOLsrE1P@cluster0.dmbatnl.mongodb.net/?retryWrites=true&w=majority",
+    mongodbUrl: process.env.MONGODB_URI,
     frontEndUrl: "https://crazycart.netlify.app/",
   },
   DEV: {
-    mongodbUrl:
-      "mongodb+srv://avinashchandrabarik01:pZ5KocckSOLsrE1P@cluster0.dmbatnl.mongodb.net/?retryWrites=true&w=majority",
+    mongodbUrl: process.env.MONGODB_URI,
     frontEndUrl: "http://localhost:3000",
   },
 };
